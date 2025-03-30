@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="唐诗三百首策略游戏 - 通过有趣的游戏方式学习中国古典诗词">
+    <meta name="keywords" content="唐诗三百首,唐诗游戏,诗词学习,古诗游戏,中国古典文学">
+    <title>唐诗三百首策略游戏 - 寓教于乐的诗词学习平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="container">
+                <div class="logo">
+                    <i class="fa fa-book-open"></i>
+                    <span>唐诗三百首</span>
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="#" class="active">首页</a></li>
+                        <li><a href="game.html">开始游戏</a></li>
+                        <li><a href="learn.html">诗词学习</a></li>
+                        <li><a href="community.html">社区</a></li>
+                        <li><a href="about.html">关于我们</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <button id="loginBtn" class="btn btn-outline">登录</button>
+                    <button id="registerBtn" class="btn btn-primary">注册</button>
+                    <div class="language-switcher">
+                        <select id="languageSelect">
+                            <option value="zh">中文</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- 主banner区域 -->
+            <section class="hero-section">
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-text" data-aos="fade-right" data-aos-duration="1000">
+                            <h1>探索唐诗之美，体验古典文化</h1>
+                            <p>通过游戏化学习，让唐诗三百首变得有趣且易于记忆。挑战自我，与好友一起在诗词世界中畅游。</p>
+                            <div class="hero-buttons">
+                                <a href="game.html" class="btn btn-primary">开始游戏</a>
+                                <a href="#features" class="btn btn-secondary">了解更多</a>
+                            </div>
+                        </div>
+                        <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
+                            <img src="https://img.freepik.com/free-vector/hand-drawn-chinese-painting_23-2149321003.jpg?w=826&t=st=1680123456~exp=1680124056~hmac=123456789abcdef" alt="唐诗三百首游戏">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 游戏特色 -->
+            <section id="features" class="features-section">
+                <div class="container">
+                    <h2 class="section-title" data-aos="fade-up">游戏特色</h2>
+                    <div class="features-grid">
+                        <div class="feature-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="feature-icon">
+                                <i class="fas fa-gamepad"></i>
+                            </div>
+                            <h3>趣味游戏化学习</h3>
+                            <p>通过多种游戏模式，将枯燥的诗词记忆转变为有趣的互动体验，让学习变得轻松愉快。</p>
+                        </div>
+                        <div class="feature-card" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>社交互动对战</h3>
+                            <p>与朋友或全球玩家一起竞技，分享你的诗词知识，在对战中提升自己的诗词水平。</p>
+                        </div>
+                        <div class="feature-card" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>个性化学习路径</h3>
+                            <p>根据你的学习进度和偏好，智能推荐适合的学习内容，打造专属于你的唐诗学习计划。</p>
+                        </div>
+                        <div class="feature-card" data-aos="zoom-in" data-aos-delay="400">
+                            <div class="feature-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3>丰富的诗词资源</h3>
+                            <p>包含完整的唐诗三百首内容，每首诗都配有注释、译文和赏析，帮助深入理解。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 游戏模式 -->
+            <section class="game-modes-section">
+                <div class="container">
+                    <h2 class="section-title" data-aos="fade-up">游戏模式</h2>
+                    <div class="game-modes-container">
+                        <div class="game-mode" data-aos="fade-right" data-aos-delay="100">
+                            <div class="game-mode-image">
+                                <img src="https://img.freepik.com/free-vector/hand-drawn-traditional-chinese-painting-with-birds_23-2149320992.jpg?w=826&t=st=1680123456~exp=1680124056~hmac=234567891abcdef" alt="单人模式">
+                            </div>
+                            <div class="game-mode-info">
+                                <h3>单人模式</h3>
+                                <p>通过关卡挑战，在充满诗意的故事情境中探索唐代历史文化，解锁更多诗词和典故。选择不同的诗人角色，体验不同的游戏技能和诗词特性。</p>
+                                <a href="game.html" class="btn btn-primary">开始探索</a>
+                            </div>
+                        </div>
+                        <div class="game-mode" data-aos="fade-left" data-aos-delay="200">
+                            <div class="game-mode-info">
+                                <h3>多人对战</h3>
+                                <p>与全球玩家实时对战，展示你的诗词功底。多种对战形式，包括诗词问答、飞花令、诗句接龙等，让你在竞技中体验诗词的魅力，结交志同道合的朋友。</p>
+                                <a href="game.html" class="btn btn-primary">开始对战</a>
+                            </div>
+                            <div class="game-mode-image">
+                                <img src="https://img.freepik.com/free-vector/hand-drawn-chinese-painting-with-bird-elements_23-2149321007.jpg?w=826&t=st=1680123456~exp=1680124056~hmac=345678912abcdef" alt="多人对战">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 角色展示 -->
+            <section class="character-carousel">
+                <div class="container">
+                    <h2 class="section-title" data-aos="fade-up">诗人角色</h2>
+                    <div class="carousel-container" data-aos="fade-up" data-aos-delay="200">
+                        <div class="carousel-slide">
+                            <div class="character-slide active">
+                                <div class="character-image">
+                                    <img src="https://img.freepik.com/free-vector/hand-drawn-chinese-traditional-painting_23-2149329405.jpg?w=826&t=st=1680123456~exp=1680124056~hmac=456789123abcdef" alt="李白">
+                                </div>
+                                <div class="character-info">
+                                    <h3 class="character-name">李白</h3>
+                                    <div class="character-title">诗仙</div>
+                                    <div class="character-stats">
+                                        <div class="stat">
+                                            <span class="stat-value">94</span>
+                                            <span class="stat-label">灵感</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-value">88</span>
+                                            <span class="stat-label">表达</span>
+                                        </div>
+                                        <div class="stat">
+                                            <span class="stat-value">82</span>
+                                            <span class="stat-label">技巧</span>
+                                        </div>
+                                    </div>
+                                    <p class="character-desc">李白，字太白，号青莲居士，唐代伟大的浪漫主义诗人。其诗豪放飘逸，想象丰富，语言瑰丽，音律和谐，被誉为"诗仙"。</p>
+                                    <div class="character-skill">
+                                        <div class="skill-name">技能：诗仙之怒</div>
+                                        <div class="skill-desc">使用后可在3回合内提高30%的答题速度，并有20%的几率直接获得正确答案。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="carousel-controls">
+                            <button class="carousel-prev"><i class="fas fa-chevron-left"></i></button>
+                            <div class="carousel-dots">
+                                <span class="dot active" data-index="0"></span>
+                                <span class="dot" data-index="1"></span>
+                                <span class="dot" data-index="2"></span>
+                                <span class="dot" data-index="3"></span>
+                            </div>
+                            <button class="carousel-next"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 用户评价 -->
+            <section class="testimonials">
+                <div class="container">
+                    <h2 class="section-title">用户评价</h2>
+                    <div class="testimonial-cards">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>"这款游戏让我爱上了唐诗！通过对战的方式学习既有趣又高效，现在我能背诵至少50首唐诗了。"</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <img src="images/avatars/user1.jpg" alt="用户头像">
+                                </div>
+                                <div class="author-info">
+                                    <div class="author-name">李明</div>
+                                    <div class="author-title">高中生</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>"作为一名语文老师，我向所有学生推荐这款游戏。它将学习与娱乐完美结合，让孩子们主动学习古诗。"</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <img src="images/avatars/user2.jpg" alt="用户头像">
+                                </div>
+                                <div class="author-info">
+                                    <div class="author-name">王老师</div>
+                                    <div class="author-title">语文教师</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-alt"></i>
+                            </div>
+                            <div class="testimonial-content">
+                                <p>"身为海外华人，这款游戏帮助我的孩子更好地学习中国传统文化。界面精美，操作简单，内容丰富。"</p>
+                            </div>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <img src="images/avatars/user3.jpg" alt="用户头像">
+                                </div>
+                                <div class="author-info">
+                                    <div class="author-name">张女士</div>
+                                    <div class="author-title">海外华人家长</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 会员订阅 -->
+            <section class="subscription">
+                <div class="container">
+                    <h2 class="section-title">会员订阅</h2>
+                    <div class="subscription-plans">
+                        <div class="subscription-plan">
+                            <div class="plan-header">
+                                <h3>免费用户</h3>
+                                <div class="plan-price">¥0<span>/永久</span></div>
+                            </div>
+                            <ul class="plan-features">
+                                <li><i class="fa fa-check"></i> 基础游戏体验</li>
+                                <li><i class="fa fa-check"></i> 包含50首精选唐诗</li>
+                                <li><i class="fa fa-check"></i> 每日10次对战机会</li>
+                                <li><i class="fa fa-check"></i> 社区基础访问权限</li>
+                                <li><i class="fa fa-times"></i> 含广告</li>
+                            </ul>
+                            <button class="btn btn-outline btn-block">当前方案</button>
+                        </div>
+                        <div class="subscription-plan premium">
+                            <div class="plan-badge">推荐</div>
+                            <div class="plan-header">
+                                <h3>年度会员</h3>
+                                <div class="plan-price">¥158<span>/年</span></div>
+                            </div>
+                            <ul class="plan-features">
+                                <li><i class="fa fa-check"></i> 完整游戏体验</li>
+                                <li><i class="fa fa-check"></i> 解锁全部300首唐诗</li>
+                                <li><i class="fa fa-check"></i> 无限对战机会</li>
+                                <li><i class="fa fa-check"></i> 社区完整访问权限</li>
+                                <li><i class="fa fa-check"></i> 专属角色皮肤</li>
+                                <li><i class="fa fa-check"></i> 每月赠送300金币</li>
+                                <li><i class="fa fa-check"></i> 无广告体验</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block">立即订阅</button>
+                        </div>
+                        <div class="subscription-plan">
+                            <div class="plan-header">
+                                <h3>月度会员</h3>
+                                <div class="plan-price">¥18<span>/月</span></div>
+                            </div>
+                            <ul class="plan-features">
+                                <li><i class="fa fa-check"></i> 完整游戏体验</li>
+                                <li><i class="fa fa-check"></i> 解锁全部300首唐诗</li>
+                                <li><i class="fa fa-check"></i> 每日额外10次对战机会</li>
+                                <li><i class="fa fa-check"></i> 社区完整访问权限</li>
+                                <li><i class="fa fa-check"></i> 每月赠送100金币</li>
+                                <li><i class="fa fa-check"></i> 无广告体验</li>
+                            </ul>
+                            <button class="btn btn-secondary btn-block">立即订阅</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 下载区域 -->
+            <section class="download">
+                <div class="container">
+                    <div class="download-content">
+                        <h2>随时随地学习古诗</h2>
+                        <p>下载我们的移动应用，在手机或平板上享受更便捷的学习体验</p>
+                        <div class="download-buttons">
+                            <a href="#" class="download-btn">
+                                <i class="fab fa-apple"></i>
+                                <span>
+                                    <small>下载于</small>
+                                    App Store
+                                </span>
+                            </a>
+                            <a href="#" class="download-btn">
+                                <i class="fab fa-google-play"></i>
+                                <span>
+                                    <small>下载于</small>
+                                    Google Play
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="download-image">
+                        <img src="images/app-mockup.png" alt="移动应用展示">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 订阅通讯 -->
+            <section class="newsletter">
+                <div class="container">
+                    <div class="newsletter-content">
+                        <h2>订阅我们的通讯</h2>
+                        <p>获取最新游戏更新、诗词赏析和学习资源，不错过任何重要内容</p>
+                        <form class="newsletter-form">
+                            <input type="email" placeholder="输入您的邮箱地址" required>
+                            <button type="submit" class="btn btn-primary">订阅</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-top">
+                    <div class="footer-logo">
+                        <i class="fa fa-book-open"></i>
+                        <span>唐诗三百首</span>
+                    </div>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-content">
+                    <div class="footer-column">
+                        <h3>关于我们</h3>
+                        <ul>
+                            <li><a href="about.html">项目介绍</a></li>
+                            <li><a href="team.html">团队成员</a></li>
+                            <li><a href="contact.html">联系我们</a></li>
+                            <li><a href="careers.html">加入我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>游戏内容</h3>
+                        <ul>
+                            <li><a href="game.html">游戏模式</a></li>
+                            <li><a href="characters.html">角色介绍</a></li>
+                            <li><a href="poems.html">诗词列表</a></li>
+                            <li><a href="ranking.html">排行榜</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>学习资源</h3>
+                        <ul>
+                            <li><a href="learn.html">学习中心</a></li>
+                            <li><a href="articles.html">诗词赏析</a></li>
+                            <li><a href="videos.html">教学视频</a></li>
+                            <li><a href="history.html">历史背景</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3>帮助支持</h3>
+                        <ul>
+                            <li><a href="faq.html">常见问题</a></li>
+                            <li><a href="support.html">用户支持</a></li>
+                            <li><a href="feedback.html">意见反馈</a></li>
+                            <li><a href="updates.html">更新日志</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-copyright">
+                        &copy; 2023 唐诗三百首策略游戏 版权所有
+                    </div>
+                    <div class="footer-links">
+                        <a href="terms.html">用户协议</a>
+                        <a href="privacy.html">隐私政策</a>
+                        <a href="cookies.html">Cookie政策</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- 登录模态框 -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="modal-header">
+                    <h2>登录账号</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginUsername">用户名/邮箱</label>
+                            <input type="text" id="loginUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">密码</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <div class="form-actions">
+                            <div class="form-links">
+                                <a href="#" id="forgotPassword">忘记密码?</a>
+                                <a href="#" id="switchToRegister">注册账号</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">登录</button>
+                        </div>
+                        <div class="social-login">
+                            <p>或通过以下方式登录</p>
+                            <div class="social-buttons">
+                                <button type="button" class="btn-social btn-wechat"><i class="fab fa-weixin"></i></button>
+                                <button type="button" class="btn-social btn-google"><i class="fab fa-google"></i></button>
+                                <button type="button" class="btn-social btn-facebook"><i class="fab fa-facebook-f"></i></button>
+                                <button type="button" class="btn-social btn-twitter"><i class="fab fa-twitter"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 注册模态框 -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="modal-header">
+                    <h2>注册账号</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="registerUsername">用户名</label>
+                            <input type="text" id="registerUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">邮箱</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">密码</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">确认密码</label>
+                            <input type="password" id="registerConfirmPassword" required>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <label for="agreeTerms">我已阅读并同意<a href="terms.html">用户协议</a>和<a href="privacy.html">隐私政策</a></label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-block">注册</button>
+                            <p class="form-switch">已有账号? <a href="#" id="switchToLogin">立即登录</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 公告区域 -->
+        <div class="announcement">
+            <div class="announcement-content">
+                <i class="fa fa-bullhorn"></i>
+                <span>欢迎来到唐诗三百首战略游戏！本周新增李商隐角色，快来体验吧！</span>
+            </div>
+            <button class="announcement-close">&times;</button>
+        </div>
+    </div>
+
+    <!-- Google Ads -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"></script>
+    
+    <!-- 主脚本 -->
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化AOS动画库
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // 确保在移动设备上的滑动功能正常
+            const touchSupportSetup = () => {
+                const carousel = document.querySelector('.carousel-container');
+                if (!carousel) return;
+                
+                let startX, endX;
+                const threshold = 50; // 滑动阈值
+                
+                carousel.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+                
+                carousel.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    handleSwipe();
+                });
+                
+                function handleSwipe() {
+                    const distance = startX - endX;
+                    
+                    if (Math.abs(distance) < threshold) return;
+                    
+                    if (distance > 0) {
+                        // 向左滑动，显示下一个
+                        document.querySelector('.carousel-next').click();
+                    } else {
+                        // 向右滑动，显示上一个
+                        document.querySelector('.carousel-prev').click();
+                    }
+                }
+            };
+            
+            touchSupportSetup();
+        });
+    </script>
+</body>
+</html> 

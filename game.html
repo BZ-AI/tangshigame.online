@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>唐诗三百首 - 游戏中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <style>
+        /* 游戏页面特定样式 */
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .game-mode-card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .game-mode-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(139, 69, 19, 0.3);
+        }
+        
+        .game-mode-header {
+            background: #8B4513;
+            color: #F7E9D9;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .game-mode-body {
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .game-mode-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #8B4513;
+        }
+        
+        .game-mode-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .battle-arena {
+            background: url('https://img.freepik.com/free-vector/chinese-watercolor-background_52683-63363.jpg?w=826&t=st=1680123456~exp=1680124056~hmac=987654321abcdef') center/cover no-repeat;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            margin-bottom: 40px;
+            display: none;
+        }
+        
+        .arena-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .player-info {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+        }
+        
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #F7E9D9;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #8B4513;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+        }
+        
+        .player-details {
+            flex-grow: 1;
+        }
+        
+        .player-name {
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 5px;
+        }
+        
+        .health-bar {
+            width: 150px;
+            height: 15px;
+            background: #ddd;
+            border-radius: 7px;
+            overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%;
+            width: 70%;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+        }
+        
+        .opponent .health-fill {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+        
+        .timer {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #8B4513;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+        }
+        
+        .battle-content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .battle-content h3 {
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+        
+        .poem-challenge {
+            margin-bottom: 30px;
+        }
+        
+        .poem-lines {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .answer-option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+        
+        .answer-option:hover {
+            background: #F5E6C8;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.2);
+        }
+        
+        .fill-blank-challenge {
+            margin-bottom: 30px;
+        }
+        
+        .fill-blank-lines {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .blank {
+            display: inline-block;
+            width: 80px;
+            border-bottom: 2px solid #8B4513;
+            margin: 0 5px;
+            text-align: center;
+        }
+        
+        .character-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .character {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 2px solid #8B4513;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+        
+        .character:hover {
+            background: #F5E6C8;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(139, 69, 19, 0.2);
+        }
+        
+        .system-announcement {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            display: none;
+        }
+        
+        .announcement-title {
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .announcement-content {
+            color: #666;
+        }
+        
+        .game-result {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+            display: none;
+        }
+        
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #f39c12;
+        }
+        
+        .result-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+        
+        .result-description {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .result-rewards {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .reward {
+            text-align: center;
+        }
+        
+        .reward-value {
+            font-weight: bold;
+            color: #8B4513;
+            font-size: 20px;
+        }
+        
+        .reward-label {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8B4513;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #8B4513;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <nav class="main-nav">
+                <div class="logo">
+                    <a href="index.html">唐诗三百首</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="#" class="active">游戏</a></li>
+                    <li><a href="#">诗词库</a></li>
+                    <li><a href="#">学习</a></li>
+                    <li><a href="#">社区</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn-login" data-toggle="modal" data-target="loginModal">登录</button>
+                    <button class="btn-register" data-toggle="modal" data-target="registerModal">注册</button>
+                </div>
+                <div class="language-switch">
+                    <span class="current-lang">中文</span>
+                    <i class="fas fa-globe"></i>
+                    <div class="language-dropdown">
+                        <a href="#" class="active">中文</a>
+                        <a href="#">English</a>
+                    </div>
+                </div>
+                <div class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-banner">
+        <div class="container">
+            <h1>游戏中心</h1>
+            <p>探索唐诗世界，以诗会友，以诗证道</p>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="game-container">
+            <section class="game-mode-selection">
+                <h2 class="section-title">选择游戏模式</h2>
+                <p class="section-description">不同的游戏模式提供不同的挑战和奖励体验，选择适合您的模式开始游戏吧！</p>
+                
+                <div class="game-modes">
+                    <div class="game-mode-card" id="singleMode">
+                        <div class="game-mode-header">
+                            单人模式
+                        </div>
+                        <div class="game-mode-body">
+                            <div class="game-mode-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3>唐诗探索之旅</h3>
+                            <p class="game-mode-description">按照剧情回答问题，探索唐代历史文化，解锁更多诗词和故事。</p>
+                            <button class="btn btn-primary start-game" data-mode="single">
+                                开始游戏
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="game-mode-card" id="multiMode">
+                        <div class="game-mode-header">
+                            多人对战
+                        </div>
+                        <div class="game-mode-body">
+                            <div class="game-mode-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>诗词对战擂台</h3>
+                            <p class="game-mode-description">与其他玩家实时对战，展示你的诗词功底，争夺排行榜前列。</p>
+                            <button class="btn btn-primary start-game" data-mode="multi">
+                                开始游戏
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="game-mode-card" id="timeMode">
+                        <div class="game-mode-header">
+                            限时挑战
+                        </div>
+                        <div class="game-mode-body">
+                            <div class="game-mode-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3>争分夺秒</h3>
+                            <p class="game-mode-description">在规定时间内回答尽可能多的问题，挑战高分，解锁特殊奖励。</p>
+                            <button class="btn btn-primary start-game" data-mode="time">
+                                开始游戏
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="game-mode-card disabled" id="seasonMode">
+                        <div class="game-mode-header">
+                            竞技赛季
+                        </div>
+                        <div class="game-mode-body">
+                            <div class="game-mode-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <h3>诗海争锋</h3>
+                            <p class="game-mode-description">参与季度竞技赛，争夺丰厚奖励和称号，成为真正的诗词大师。</p>
+                            <div class="coming-soon-badge">即将上线</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="battle-arena" id="battleArena">
+                <div class="back-button" id="backToModes">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                
+                <div class="system-announcement" id="systemAnnouncement">
+                    <div class="announcement-title">系统公告</div>
+                    <div class="announcement-content" id="announcementText">游戏即将开始，准备迎接挑战吧！</div>
+                </div>
+                
+                <div class="arena-header">
+                    <div class="player-info">
+                        <div class="player-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="player-details">
+                            <div class="player-name" id="playerName">诗词大师</div>
+                            <div class="health-bar">
+                                <div class="health-fill" id="playerHealth"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timer" id="gameTimer">60</div>
+                    
+                    <div class="player-info opponent">
+                        <div class="player-details">
+                            <div class="player-name" id="opponentName">电脑对手</div>
+                            <div class="health-bar">
+                                <div class="health-fill" id="opponentHealth"></div>
+                            </div>
+                        </div>
+                        <div class="player-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="battle-content">
+                    <div class="multiple-choice-challenge" id="multipleChoice">
+                        <h3>选择题挑战</h3>
+                        <div class="poem-challenge">
+                            <div class="poem-title" id="mcPoemTitle">《春晓》 - 孟浩然</div>
+                            <div class="poem-lines" id="mcPoemContent">
+                                春眠不觉晓，处处闻啼鸟。<br>
+                                夜来风雨声，花落知多少。
+                            </div>
+                        </div>
+                        <div class="question" id="mcQuestion">这首诗描述的是哪个季节？</div>
+                        <div class="answers" id="mcAnswers">
+                            <div class="answer-option" data-correct="true">春天</div>
+                            <div class="answer-option">夏天</div>
+                            <div class="answer-option">秋天</div>
+                            <div class="answer-option">冬天</div>
+                        </div>
+                    </div>
+                    
+                    <div class="fill-blank-challenge" id="fillBlank" style="display: none;">
+                        <h3>填空题挑战</h3>
+                        <div class="poem-challenge">
+                            <div class="poem-title" id="fbPoemTitle">《静夜思》 - 李白</div>
+                            <div class="fill-blank-lines" id="fbPoemContent">
+                                床前明月光，疑是地上霜。<br>
+                                举头望<span class="blank" id="blank1"></span>，低头思<span class="blank" id="blank2"></span>。
+                            </div>
+                        </div>
+                        <div class="character-options" id="characterOptions">
+                            <div class="character" data-char="明" data-target="blank1">明</div>
+                            <div class="character" data-char="月" data-target="blank1">月</div>
+                            <div class="character" data-char="思" data-target="blank2">思</div>
+                            <div class="character" data-char="乡" data-target="blank2">乡</div>
+                            <div class="character" data-char="故" data-target="blank2">故</div>
+                            <div class="character" data-char="家" data-target="blank2">家</div>
+                            <div class="character" data-char="天" data-target="blank1">天</div>
+                            <div class="character" data-char="云" data-target="blank1">云</div>
+                        </div>
+                    </div>
+
+                    <div class="poem-recitation-challenge" id="recitationChallenge" style="display: none;">
+                        <h3>诗词朗诵挑战</h3>
+                        <div class="poem-challenge">
+                            <div class="poem-title" id="rcPoemTitle">《赠汪伦》 - 李白</div>
+                            <div class="poem-lines" id="rcPoemContent">
+                                李白乘舟将欲行，忽闻岸上踏歌声。<br>
+                                桃花潭水深千尺，不及汪伦送我情。
+                            </div>
+                        </div>
+                        <div class="recitation-controls">
+                            <button class="btn btn-primary" id="startRecitation">
+                                <i class="fas fa-microphone"></i> 开始朗诵
+                            </button>
+                            <div class="recitation-status" id="recitationStatus">准备就绪</div>
+                            <div class="recitation-progress">
+                                <div class="progress-fill" id="recitationProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-result" id="gameResult">
+                    <div class="result-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="result-title" id="resultTitle">恭喜您获得胜利！</div>
+                    <div class="result-description" id="resultDescription">
+                        您成功地完成了所有挑战，展示了卓越的诗词知识。
+                    </div>
+                    <div class="result-rewards">
+                        <div class="reward">
+                            <div class="reward-value">+50</div>
+                            <div class="reward-label">经验值</div>
+                        </div>
+                        <div class="reward">
+                            <div class="reward-value">+100</div>
+                            <div class="reward-label">金币</div>
+                        </div>
+                        <div class="reward">
+                            <div class="reward-value">+1</div>
+                            <div class="reward-label">新解锁诗词</div>
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="btn btn-primary restart-game">再来一局</button>
+                        <button class="btn btn-secondary back-to-modes">返回模式选择</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recent-achievements">
+                <h2 class="section-title">最近成就</h2>
+                <div class="achievement-list">
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-title">诗词启蒙</div>
+                            <div class="achievement-desc">成功完成10首诗词的挑战</div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-count">7/10</div>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-title">连胜达人</div>
+                            <div class="achievement-desc">连续获得5场胜利</div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div class="achievement-count">3/5</div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="leaderboard">
+                <h2 class="section-title">排行榜</h2>
+                <div class="leaderboard-tabs">
+                    <button class="tab-btn active" data-tab="daily">每日</button>
+                    <button class="tab-btn" data-tab="weekly">每周</button>
+                    <button class="tab-btn" data-tab="monthly">每月</button>
+                </div>
+                
+                <div class="leaderboard-content" id="dailyLeaderboard">
+                    <div class="rank-item">
+                        <div class="rank-position top">1</div>
+                        <div class="rank-user">
+                            <div class="rank-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="rank-name">诗词王者</div>
+                        </div>
+                        <div class="rank-score">9875</div>
+                    </div>
+                    
+                    <div class="rank-item">
+                        <div class="rank-position top">2</div>
+                        <div class="rank-user">
+                            <div class="rank-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="rank-name">李白转世</div>
+                        </div>
+                        <div class="rank-score">9546</div>
+                    </div>
+                    
+                    <div class="rank-item">
+                        <div class="rank-position top">3</div>
+                        <div class="rank-user">
+                            <div class="rank-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="rank-name">诗林高手</div>
+                        </div>
+                        <div class="rank-score">9234</div>
+                    </div>
+                    
+                    <div class="rank-item">
+                        <div class="rank-position">4</div>
+                        <div class="rank-user">
+                            <div class="rank-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="rank-name">墨客游子</div>
+                        </div>
+                        <div class="rank-score">8954</div>
+                    </div>
+                    
+                    <div class="rank-item">
+                        <div class="rank-position">5</div>
+                        <div class="rank-user">
+                            <div class="rank-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="rank-name">诗词小白</div>
+                        </div>
+                        <div class="rank-score">8765</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>唐诗三百首</h3>
+                    <p>探索唐诗之美，传承中华文化</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-links-column">
+                        <h4>网站导航</h4>
+                        <ul>
+                            <li><a href="index.html">首页</a></li>
+                            <li><a href="game.html">游戏中心</a></li>
+                            <li><a href="#">诗词库</a></li>
+                            <li><a href="#">学习资源</a></li>
+                            <li><a href="#">关于我们</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>学习资源</h4>
+                        <ul>
+                            <li><a href="#">诗词赏析</a></li>
+                            <li><a href="#">历史背景</a></li>
+                            <li><a href="#">诗人介绍</a></li>
+                            <li><a href="#">古文字典</a></li>
+                            <li><a href="#">常见问题</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-column">
+                        <h4>联系我们</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-envelope"></i> 联系我们</a></li>
+                            <li><a href="#"><i class="fas fa-question-circle"></i> 帮助中心</a></li>
+                            <li><a href="#"><i class="fas fa-bullhorn"></i> 反馈建议</a></li>
+                            <li><a href="#"><i class="fab fa-weixin"></i> 官方微信</a></li>
+                            <li><a href="#"><i class="fab fa-weibo"></i> 官方微博</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; 2023 唐诗三百首游戏平台. 保留所有权利.
+                </div>
+                <div class="footer-bottom-links">
+                    <a href="#">隐私政策</a>
+                    <a href="#">使用条款</a>
+                    <a href="#">Cookie政策</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 登录模态框 -->
+    <div class="modal" id="loginModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>用户登录</h3>
+                    <span class="close-modal" data-dismiss="modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">邮箱</label>
+                            <input type="email" id="loginEmail" required placeholder="请输入您的邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">密码</label>
+                            <input type="password" id="loginPassword" required placeholder="请输入您的密码">
+                        </div>
+                        <div class="remember-forgot">
+                            <label class="remember-me">
+                                <input type="checkbox"> 记住我
+                            </label>
+                            <a href="#" class="forgot-password">忘记密码?</a>
+                        </div>
+                        <button type="submit" class="btn-submit">登录</button>
+                    </form>
+                    <div class="social-login">
+                        <p>或通过以下方式登录</p>
+                        <div class="social-icons">
+                            <a href="#" class="social-icon"><i class="fab fa-weixin"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-qq"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-weibo"></i></a>
+                        </div>
+                    </div>
+                    <div class="register-link">
+                        还没有账号? <a href="#" data-toggle="modal" data-target="registerModal">立即注册</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div class="modal" id="registerModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>用户注册</h3>
+                    <span class="close-modal" data-dismiss="modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="registerUsername">用户名</label>
+                            <input type="text" id="registerUsername" required placeholder="请输入您的用户名">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">邮箱</label>
+                            <input type="email" id="registerEmail" required placeholder="请输入您的邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">密码</label>
+                            <input type="password" id="registerPassword" required placeholder="请设置您的密码">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">确认密码</label>
+                            <input type="password" id="registerConfirmPassword" required placeholder="请再次输入密码">
+                        </div>
+                        <div class="terms-agree">
+                            <label>
+                                <input type="checkbox" required> 我同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-submit">注册</button>
+                    </form>
+                    <div class="login-link">
+                        已有账号? <a href="#" data-toggle="modal" data-target="loginModal">立即登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="multi-player-lobby" id="multiPlayerLobby" style="display: none;">
+        <h2 class="section-title">多人对战大厅</h2>
+        <div class="lobby-controls">
+            <div class="room-selection">
+                <select id="roomSelect" class="room-select">
+                    <option value="">-- 选择房间 --</option>
+                    <option value="room1">诗海拾贝 (7/10)</option>
+                    <option value="room2">诗词争霸 (4/8)</option>
+                    <option value="room3">唐诗雅韵 (2/6)</option>
+                    <option value="room4">千古绝唱 (5/10)</option>
+                </select>
+                <button class="btn btn-primary" id="joinRoom">加入房间</button>
+            </div>
+            <div class="create-room">
+                <button class="btn btn-secondary" id="createRoom">创建新房间</button>
+            </div>
+        </div>
+        
+        <div class="online-players">
+            <h3>在线玩家 (23)</h3>
+            <div class="player-list">
+                <div class="player-item">
+                    <div class="player-avatar"><i class="fas fa-user"></i></div>
+                    <div class="player-info">
+                        <div class="player-name">诗词王者</div>
+                        <div class="player-level">Lv.35</div>
+                    </div>
+                    <div class="player-status online">在线</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-avatar"><i class="fas fa-user"></i></div>
+                    <div class="player-info">
+                        <div class="player-name">李白转世</div>
+                        <div class="player-level">Lv.28</div>
+                    </div>
+                    <div class="player-status playing">游戏中</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-avatar"><i class="fas fa-user"></i></div>
+                    <div class="player-info">
+                        <div class="player-name">墨客游子</div>
+                        <div class="player-level">Lv.17</div>
+                    </div>
+                    <div class="player-status online">在线</div>
+                </div>
+                <div class="player-item">
+                    <div class="player-avatar"><i class="fas fa-user"></i></div>
+                    <div class="player-info">
+                        <div class="player-name">诗词小白</div>
+                        <div class="player-level">Lv.5</div>
+                    </div>
+                    <div class="player-status away">离开</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-system">
+            <div class="chat-messages" id="chatMessages">
+                <div class="system-message">欢迎来到多人对战大厅！</div>
+                <div class="chat-message">
+                    <span class="message-sender">诗词王者:</span> 
+                    <span class="message-content">有人想来一局吗？</span>
+                </div>
+                <div class="chat-message">
+                    <span class="message-sender">李白转世:</span> 
+                    <span class="message-content">我来！</span>
+                </div>
+                <div class="system-message">李白转世加入了诗海拾贝房间。</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="输入聊天内容...">
+                <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        
+        <div class="back-to-modes">
+            <button class="btn btn-secondary" id="backFromLobby">返回模式选择</button>
+        </div>
+    </section>
+
+    <div class="create-room-modal" id="createRoomModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>创建房间</h3>
+                <span class="close-modal" id="closeCreateRoom">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="createRoomForm">
+                    <div class="form-group">
+                        <label for="roomName">房间名称</label>
+                        <input type="text" id="roomName" required placeholder="给你的房间起个名字吧">
+                    </div>
+                    <div class="form-group">
+                        <label for="roomCapacity">玩家人数</label>
+                        <select id="roomCapacity">
+                            <option value="2">2人</option>
+                            <option value="4">4人</option>
+                            <option value="6">6人</option>
+                            <option value="8">8人</option>
+                            <option value="10" selected>10人</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameMode">游戏模式</label>
+                        <select id="gameMode">
+                            <option value="classic" selected>经典模式</option>
+                            <option value="speed">速答模式</option>
+                            <option value="team">团队模式</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isPrivate"> 设为私人房间
+                        </label>
+                    </div>
+                    <div class="form-group password-group" style="display: none;">
+                        <label for="roomPassword">房间密码</label>
+                        <input type="password" id="roomPassword" placeholder="设置4-8位密码">
+                    </div>
+                    <button type="submit" class="btn-submit">创建房间</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 游戏模式选择
+            const startButtons = document.querySelectorAll('.start-game');
+            const battleArena = document.getElementById('battleArena');
+            const gameModeSelection = document.querySelector('.game-mode-selection');
+            const backToModesBtn = document.getElementById('backToModes');
+            const systemAnnouncement = document.getElementById('systemAnnouncement');
+            const announcementText = document.getElementById('announcementText');
+            const multipleChoice = document.getElementById('multipleChoice');
+            const fillBlank = document.getElementById('fillBlank');
+            const gameResult = document.getElementById('gameResult');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDescription = document.getElementById('resultDescription');
+            const restartGameBtn = document.querySelector('.restart-game');
+            const backToModesBtn2 = document.querySelector('.back-to-modes');
+            const gameTimer = document.getElementById('gameTimer');
+            const playerHealth = document.getElementById('playerHealth');
+            const opponentHealth = document.getElementById('opponentHealth');
+            
+            // 角色填充相关元素
+            const characters = document.querySelectorAll('.character');
+            const blanks = document.querySelectorAll('.blank');
+            
+            // 游戏状态
+            let gameMode = '';
+            let timeLeft = 60;
+            let timerInterval = null;
+            let playerHealthValue = 100;
+            let opponentHealthValue = 100;
+            let currentRound = 0;
+            let maxRounds = 5;
+            
+            // 初始化健康条
+            playerHealth.style.width = playerHealthValue + '%';
+            opponentHealth.style.width = opponentHealthValue + '%';
+            
+            // 开始游戏
+            startButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    gameMode = this.getAttribute('data-mode');
+                    gameModeSelection.style.display = 'none';
+                    battleArena.style.display = 'block';
+                    
+                    // 显示系统公告
+                    showAnnouncement('游戏即将开始，准备迎接挑战吧！');
+                    
+                    // 开始游戏计时器
+                    startTimer();
+                    
+                    // 随机选择第一个挑战类型
+                    setTimeout(() => {
+                        systemAnnouncement.style.display = 'none';
+                        showRandomChallenge();
+                    }, 3000);
+                });
+            });
+            
+            // 返回模式选择
+            backToModesBtn.addEventListener('click', resetGame);
+            backToModesBtn2.addEventListener('click', resetGame);
+            
+            // 重新开始游戏
+            restartGameBtn.addEventListener('click', function() {
+                gameResult.style.display = 'none';
+                resetGameState();
+                showAnnouncement('新一轮游戏开始，祝您好运！');
+                startTimer();
+                
+                setTimeout(() => {
+                    systemAnnouncement.style.display = 'none';
+                    showRandomChallenge();
+                }, 3000);
+            });
+            
+            // 选择题答案选择
+            const answerOptions = document.querySelectorAll('.answer-option');
+            answerOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    handleAnswer(isCorrect);
+                });
+            });
+            
+            // 填空题字符选择
+            characters.forEach(character => {
+                character.addEventListener('click', function() {
+                    const char = this.getAttribute('data-char');
+                    const targetId = this.getAttribute('data-target');
+                    const targetBlank = document.getElementById(targetId);
+                    
+                    if (targetBlank) {
+                        targetBlank.textContent = char;
+                        checkFilledBlanks();
+                    }
+                });
+            });
+            
+            // 重置游戏
+            function resetGame() {
+                resetGameState();
+                battleArena.style.display = 'none';
+                gameModeSelection.style.display = 'block';
+                clearInterval(timerInterval);
+            }
+            
+            // 重置游戏状态
+            function resetGameState() {
+                timeLeft = 60;
+                gameTimer.textContent = timeLeft;
+                playerHealthValue = 100;
+                opponentHealthValue = 100;
+                playerHealth.style.width = playerHealthValue + '%';
+                opponentHealth.style.width = opponentHealthValue + '%';
+                currentRound = 0;
+                
+                // 重置填空
+                blanks.forEach(blank => {
+                    blank.textContent = '';
+                });
+            }
+            
+            // 显示系统公告
+            function showAnnouncement(text) {
+                announcementText.textContent = text;
+                systemAnnouncement.style.display = 'block';
+            }
+            
+            // 开始计时器
+            function startTimer() {
+                clearInterval(timerInterval);
+                timeLeft = 60;
+                gameTimer.textContent = timeLeft;
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    gameTimer.textContent = timeLeft;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        handleTimeUp();
+                    }
+                }, 1000);
+            }
+            
+            // 处理时间用尽
+            function handleTimeUp() {
+                showGameResult(false, '时间用尽', '您的时间已经用完，请继续努力！');
+            }
+            
+            // 显示随机挑战
+            function showRandomChallenge() {
+                currentRound++;
+                
+                if (currentRound > maxRounds) {
+                    handleGameEnd();
+                    return;
+                }
+                
+                // 如果存在已加载的挑战数据，使用它
+                if (window.gameChallenges) {
+                    // 随机选择挑战类型 (增加朗诵挑战)
+                    const challengeTypes = ['multipleChoice', 'fillBlank', 'recitation'];
+                    const challengeType = challengeTypes[Math.floor(Math.random() * (currentRound > 2 ? 3 : 2))];
+                    
+                    multipleChoice.style.display = 'none';
+                    fillBlank.style.display = 'none';
+                    recitationChallenge.style.display = 'none';
+                    
+                    if (challengeType === 'multipleChoice') {
+                        // 从挑战数据中随机选择一个多选题
+                        const challengeIndex = Math.floor(Math.random() * window.gameChallenges.multipleChoice.length);
+                        const challenge = window.gameChallenges.multipleChoice[challengeIndex];
+                        
+                        // 填充挑战内容
+                        document.getElementById('mcPoemTitle').textContent = `${challenge.title} - ${challenge.author}`;
+                        document.getElementById('mcPoemContent').innerHTML = challenge.content;
+                        document.getElementById('mcQuestion').textContent = challenge.question;
+                        
+                        // 填充选项
+                        const mcAnswers = document.getElementById('mcAnswers');
+                        mcAnswers.innerHTML = '';
+                        
+                        // 随机打乱选项顺序
+                        const shuffledOptions = [...challenge.options].sort(() => Math.random() - 0.5);
+                        
+                        shuffledOptions.forEach(option => {
+                            const optionElement = document.createElement('div');
+                            optionElement.className = 'answer-option';
+                            optionElement.textContent = option.text;
+                            
+                            if (option.correct) {
+                                optionElement.setAttribute('data-correct', 'true');
+                            }
+                            
+                            optionElement.addEventListener('click', function() {
+                                const isCorrect = this.getAttribute('data-correct') === 'true';
+                                handleAnswer(isCorrect);
+                            });
+                            
+                            mcAnswers.appendChild(optionElement);
+                        });
+                        
+                        multipleChoice.style.display = 'block';
+                    } else if (challengeType === 'fillBlank') {
+                        // 从挑战数据中随机选择一个填空题
+                        const challengeIndex = Math.floor(Math.random() * window.gameChallenges.fillBlank.length);
+                        const challenge = window.gameChallenges.fillBlank[challengeIndex];
+                        
+                        // 填充挑战内容
+                        document.getElementById('fbPoemTitle').textContent = `${challenge.title} - ${challenge.author}`;
+                        document.getElementById('fbPoemContent').innerHTML = challenge.content;
+                        
+                        // 重置填空
+                        blanks.forEach(blank => {
+                            blank.textContent = '';
+                        });
+                        
+                        // 填充字符选项
+                        const characterOptions = document.getElementById('characterOptions');
+                        characterOptions.innerHTML = '';
+                        
+                        // 随机打乱字符顺序
+                        const shuffledOptions = [...challenge.options].sort(() => Math.random() - 0.5);
+                        
+                        shuffledOptions.forEach(char => {
+                            const charElement = document.createElement('div');
+                            charElement.className = 'character';
+                            charElement.textContent = char;
+                            
+                            // 找到该字符应该填入的空格
+                            let targetBlank = null;
+                            for (const blank of challenge.blanks) {
+                                if (blank.correct.some(correctAns => correctAns.includes(char))) {
+                                    targetBlank = blank.id;
+                                    break;
+                                }
+                            }
+                            
+                            if (targetBlank) {
+                                charElement.setAttribute('data-target', targetBlank);
+                            } else {
+                                // 随机分配一个空格
+                                const randomBlankId = challenge.blanks[Math.floor(Math.random() * challenge.blanks.length)].id;
+                                charElement.setAttribute('data-target', randomBlankId);
+                            }
+                            
+                            charElement.setAttribute('data-char', char);
+                            
+                            charElement.addEventListener('click', function() {
+                                addAnimation(this, 'character-selected');
+                                
+                                const targetId = this.getAttribute('data-target');
+                                const targetBlank = document.getElementById(targetId);
+                                
+                                if (targetBlank) {
+                                    targetBlank.textContent = char;
+                                    addAnimation(targetBlank, 'blank-filled');
+                                    checkFilledBlanks(challenge);
+                                }
+                            });
+                            
+                            characterOptions.appendChild(charElement);
+                        });
+                        
+                        fillBlank.style.display = 'block';
+                    } else if (challengeType === 'recitation') {
+                        // 朗诵挑战
+                        recitationProgress.style.width = '0%';
+                        recitationStatus.textContent = '准备就绪';
+                        recitationChallenge.style.display = 'block';
+                        
+                        // 模拟语音识别功能
+                        if (startRecitation) {
+                            startRecitation.addEventListener('click', function onceHandler() {
+                                // 防止多次点击
+                                startRecitation.removeEventListener('click', onceHandler);
+                                
+                                recitationStatus.textContent = '正在听取您的朗诵...';
+                                playSound('click');
+                                
+                                // 模拟朗诵进度
+                                let progress = 0;
+                                const progressInterval = setInterval(() => {
+                                    progress += 5;
+                                    recitationProgress.style.width = progress + '%';
+                                    
+                                    if (progress >= 100) {
+                                        clearInterval(progressInterval);
+                                        recitationStatus.textContent = '朗诵成功！';
+                                        playSound('correct');
+                                        
+                                        // 处理成功答案
+                                        setTimeout(() => {
+                                            handleAnswer(true);
+                                        }, 1000);
+                                    }
+                                }, 300);
+                            });
+                        }
+                    }
+                } else {
+                    // 如果没有加载数据，使用默认挑战
+                    const challengeType = Math.random() > 0.5 ? 'multipleChoice' : 'fillBlank';
+                    
+                    if (challengeType === 'multipleChoice') {
+                        multipleChoice.style.display = 'block';
+                        fillBlank.style.display = 'none';
+                    } else {
+                        multipleChoice.style.display = 'none';
+                        fillBlank.style.display = 'block';
+                        
+                        // 重置填空
+                        blanks.forEach(blank => {
+                            blank.textContent = '';
+                        });
+                    }
+                }
+            }
+            
+            // 处理答案
+            function handleAnswer(isCorrect) {
+                if (isCorrect) {
+                    showAnnouncement('回答正确！继续保持！');
+                    opponentHealthValue -= 20;
+                    opponentHealth.style.width = opponentHealthValue + '%';
+                } else {
+                    showAnnouncement('回答错误！再接再厉！');
+                    playerHealthValue -= 20;
+                    playerHealth.style.width = playerHealthValue + '%';
+                }
+                
+                // 检查游戏是否结束
+                if (playerHealthValue <= 0 || opponentHealthValue <= 0) {
+                    setTimeout(() => {
+                        handleGameEnd();
+                    }, 1500);
+                    return;
+                }
+                
+                // 准备下一个挑战
+                setTimeout(() => {
+                    systemAnnouncement.style.display = 'none';
+                    showRandomChallenge();
+                }, 1500);
+            }
+            
+            // 检查填空题
+            function checkFilledBlanks(challenge) {
+                if (!challenge) return;
+                
+                // 检查所有空格是否已填
+                let allFilled = true;
+                const answers = {};
+                
+                for (const blank of challenge.blanks) {
+                    const blankElement = document.getElementById(blank.id);
+                    if (!blankElement || !blankElement.textContent) {
+                        allFilled = false;
+                        break;
+                    }
+                    answers[blank.id] = blankElement.textContent;
+                }
+                
+                if (allFilled) {
+                    // 检查答案是否正确
+                    let isCorrect = true;
+                    for (const blank of challenge.blanks) {
+                        const userAnswer = document.getElementById(blank.id).textContent;
+                        const correctAnswers = blank.correct;
+                        
+                        if (!correctAnswers.includes(userAnswer)) {
+                            isCorrect = false;
+                            break;
+                        }
+                    }
+                    
+                    handleAnswer(isCorrect);
+                }
+            }
+            
+            // 处理游戏结束
+            function handleGameEnd() {
+                clearInterval(timerInterval);
+                
+                if (playerHealthValue <= 0) {
+                    showGameResult(false, '挑战失败', '不要气馁，继续努力学习，下次一定能赢！');
+                } else if (opponentHealthValue <= 0 || currentRound > maxRounds) {
+                    showGameResult(true, '挑战成功', '恭喜您成功通过所有挑战，展示了卓越的诗词知识！');
+                }
+            }
+            
+            // 显示游戏结果
+            function showGameResult(isWin, title, description) {
+                systemAnnouncement.style.display = 'none';
+                multipleChoice.style.display = 'none';
+                fillBlank.style.display = 'none';
+                
+                resultTitle.textContent = title;
+                resultDescription.textContent = description;
+                
+                if (!isWin) {
+                    document.querySelector('.result-icon i').className = 'fas fa-medal';
+                } else {
+                    document.querySelector('.result-icon i').className = 'fas fa-trophy';
+                }
+                
+                gameResult.style.display = 'block';
+            }
+            
+            // 排行榜选项卡
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 这里可以添加实际切换排行榜内容的逻辑
+                });
+            });
+
+            // 多人对战功能
+            const multiMode = document.getElementById('multiMode');
+            const multiPlayerLobby = document.getElementById('multiPlayerLobby');
+            const backFromLobby = document.getElementById('backFromLobby');
+            const createRoomBtn = document.getElementById('createRoom');
+            const createRoomModal = document.getElementById('createRoomModal');
+            const closeCreateRoom = document.getElementById('closeCreateRoom');
+            const isPrivateCheckbox = document.getElementById('isPrivate');
+            const passwordGroup = document.querySelector('.password-group');
+            const chatInput = document.getElementById('chatInput');
+            const sendChat = document.getElementById('sendChat');
+            const chatMessages = document.getElementById('chatMessages');
+            const joinRoomBtn = document.getElementById('joinRoom');
+            const roomSelect = document.getElementById('roomSelect');
+            
+            // 朗诵挑战元素
+            const recitationChallenge = document.getElementById('recitationChallenge');
+            const startRecitation = document.getElementById('startRecitation');
+            const recitationStatus = document.getElementById('recitationStatus');
+            const recitationProgress = document.getElementById('recitationProgress');
+            
+            // 多人对战模式点击处理
+            if (multiMode) {
+                const multiModeBtn = multiMode.querySelector('.start-game');
+                multiModeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 防止事件冒泡
+                    gameModeSelection.style.display = 'none';
+                    multiPlayerLobby.style.display = 'block';
+                });
+            }
+            
+            // 返回模式选择
+            if (backFromLobby) {
+                backFromLobby.addEventListener('click', function() {
+                    multiPlayerLobby.style.display = 'none';
+                    gameModeSelection.style.display = 'block';
+                });
+            }
+            
+            // 创建房间
+            if (createRoomBtn && createRoomModal) {
+                createRoomBtn.addEventListener('click', function() {
+                    createRoomModal.style.display = 'block';
+                });
+            }
+            
+            // 关闭创建房间模态框
+            if (closeCreateRoom) {
+                closeCreateRoom.addEventListener('click', function() {
+                    createRoomModal.style.display = 'none';
+                });
+            }
+            
+            // 私人房间复选框
+            if (isPrivateCheckbox && passwordGroup) {
+                isPrivateCheckbox.addEventListener('change', function() {
+                    passwordGroup.style.display = this.checked ? 'block' : 'none';
+                });
+            }
+            
+            // 创建房间表单提交
+            const createRoomForm = document.getElementById('createRoomForm');
+            if (createRoomForm) {
+                createRoomForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 显示成功消息
+                    const systemMessage = document.createElement('div');
+                    systemMessage.className = 'system-message';
+                    systemMessage.textContent = `房间"${document.getElementById('roomName').value}"创建成功！`;
+                    chatMessages.appendChild(systemMessage);
+                    
+                    // 滚动到底部
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // 关闭模态框
+                    createRoomModal.style.display = 'none';
+                    
+                    // 这里应该有更多逻辑用于创建实际房间
+                });
+            }
+            
+            // 聊天功能
+            if (sendChat && chatInput) {
+                sendChat.addEventListener('click', sendChatMessage);
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+            }
+            
+            function sendChatMessage() {
+                if (chatInput.value.trim() !== '') {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'chat-message';
+                    messageElement.innerHTML = `
+                        <span class="message-sender">诗词大师:</span> 
+                        <span class="message-content">${chatInput.value}</span>
+                    `;
+                    
+                    chatMessages.appendChild(messageElement);
+                    chatInput.value = '';
+                    
+                    // 滚动到底部
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+            
+            // 加入房间
+            if (joinRoomBtn) {
+                joinRoomBtn.addEventListener('click', function() {
+                    if (roomSelect.value) {
+                        // 显示加入消息
+                        const systemMessage = document.createElement('div');
+                        systemMessage.className = 'system-message';
+                        systemMessage.textContent = `成功加入房间！`;
+                        chatMessages.appendChild(systemMessage);
+                        
+                        // 这里应该有更多逻辑用于加入实际房间
+                        setTimeout(() => {
+                            multiPlayerLobby.style.display = 'none';
+                            battleArena.style.display = 'block';
+                            
+                            // 显示对手信息
+                            document.getElementById('opponentName').textContent = '李白转世';
+                            document.getElementById('opponentHealth').style.width = '100%';
+                            
+                            // 显示系统公告
+                            showAnnouncement('多人对战开始，祝您好运！');
+                            
+                            // 开始游戏计时器
+                            startTimer();
+                            
+                            // 随机选择第一个挑战类型
+                            setTimeout(() => {
+                                systemAnnouncement.style.display = 'none';
+                                showRandomChallenge();
+                            }, 3000);
+                        }, 1500);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

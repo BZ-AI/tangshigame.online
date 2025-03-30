@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>唐诗三百首策略游戏 - 原型设计</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #F7E9D9;
+            color: #8B4513;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .prototype-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #8B4513;
+            font-size: 28px;
+        }
+        
+        .screens {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .screen {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .screen:hover {
+            transform: translateY(-5px);
+        }
+        
+        .screen-header {
+            background: #8B4513;
+            color: #F7E9D9;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .screen-body {
+            padding: 20px;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        /* 公共组件样式 */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #8B4513;
+            color: #F7E9D9;
+        }
+        
+        .btn-secondary {
+            background: #A0522D;
+            color: #F7E9D9;
+        }
+        
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        .input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .badge-primary {
+            background: #8B4513;
+        }
+        
+        .badge-secondary {
+            background: #A0522D;
+        }
+        
+        .badge-success {
+            background: #2ecc71;
+        }
+        
+        /* 特定界面样式 */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .login-logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #8B4513;
+        }
+        
+        .login-form {
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #FDF6E9;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .menu-item:hover {
+            background: #F5E6C8;
+            transform: scale(1.05);
+        }
+        
+        .menu-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #8B4513;
+        }
+        
+        .battle-arena {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: url('https://img.freepik.com/free-vector/chinese-watercolor-background_52683-63363.jpg?w=826&t=st=1680123456~exp=1680124056~hmac=987654321abcdef') center/cover no-repeat;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .player-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #F7E9D9;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #8B4513;
+        }
+        
+        .health-bar {
+            width: 100%;
+            height: 15px;
+            background: #ddd;
+            border-radius: 7px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .health-fill {
+            height: 100%;
+            background: #2ecc71;
+            width: 70%;
+        }
+        
+        .poem-challenge {
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .answer-option {
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .answer-option:hover {
+            background: #F5E6C8;
+            border-color: #8B4513;
+        }
+        
+        .poem-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid #8B4513;
+        }
+        
+        .poem-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .poem-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .poem-author {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .poem-preview {
+            color: #888;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .achievement-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: #f39c12;
+        }
+        
+        .achievement-info {
+            flex-grow: 1;
+        }
+        
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .progress {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #f39c12;
+        }
+        
+        .rank-list {
+            width: 100%;
+        }
+        
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .rank-position {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #A0522D;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .rank-position.top {
+            background: #f39c12;
+        }
+        
+        .rank-user {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .rank-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #F7E9D9;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #8B4513;
+        }
+        
+        .rank-name {
+            font-weight: bold;
+        }
+        
+        .rank-score {
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .shop-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .shop-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .shop-item-img {
+            width: 80px;
+            height: 80px;
+            background: #F7E9D9;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #8B4513;
+        }
+        
+        .shop-item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .shop-item-desc {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .shop-item-price {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .character-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .character-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            background: #F7E9D9;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #8B4513;
+        }
+        
+        .character-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .character-desc {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .character-stats {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+        }
+        
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #8B4513;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .community-post {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #F7E9D9;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #8B4513;
+        }
+        
+        .post-info {
+            flex-grow: 1;
+        }
+        
+        .post-author {
+            font-weight: bold;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .post-content {
+            margin-bottom: 10px;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .post-action {
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-action i {
+            margin-right: 5px;
+        }
+        
+        .post-action:hover {
+            color: #8B4513;
+        }
+        
+        .settings-item {
+            margin-bottom: 20px;
+        }
+        
+        .settings-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .settings-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .settings-control {
+            margin-top: 10px;
+        }
+        
+        .language-select {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .language-option {
+            padding: 8px 15px;
+            border-radius: 5px;
+            background: #F7E9D9;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .language-option:hover {
+            background: #F5E6C8;
+        }
+        
+        .language-option.active {
+            background: #8B4513;
+            color: white;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #8B4513;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .poem-detail {
+            background: #FDF6E9;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #D2B48C;
+            position: relative;
+        }
+        
+        .poem-detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #D2B48C;
+        }
+        
+        .poem-detail-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #8B4513;
+        }
+        
+        .poem-detail-author {
+            font-size: 16px;
+            color: #A0522D;
+        }
+        
+        .poem-detail-content {
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 2;
+            font-size: 18px;
+        }
+        
+        .poem-detail-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .quiz-container {
+            background: #FDF6E9;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .quiz-question {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 15px;
+            background: white;
+            border: 1px solid #D2B48C;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quiz-option:hover {
+            background: #F5E6C8;
+            border-color: #8B4513;
+        }
+        
+        .poem-svg-container {
+            width: 100%;
+            height: 300px;
+            background: #FDF6E9;
+            border-radius: 10px;
+            border: 1px solid #D2B48C;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .lantern {
+            display: inline-block;
+            position: relative;
+            width: 20px;
+            height: 60px;
+            margin: 0 20px;
+        }
+        
+        .lantern::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -20px;
+            width: 60px;
+            height: 60px;
+            background: #FF4500;
+            border-radius: 50%;
+        }
+        
+        .lantern::after {
+            content: "福";
+            position: absolute;
+            top: 18px;
+            left: -5px;
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 22px;
+        }
+        
+        .lantern-tassel {
+            position: absolute;
+            bottom: -15px;
+            left: 7px;
+            width: 6px;
+            height: 20px;
+            background: #FFD700;
+            border-radius: 3px;
+        }
+
+        .floating-lanterns {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+        }
+        
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .collection-item {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .collection-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .collection-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #8B4513;
+        }
+        
+        .collection-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .collection-count {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .subscription-plan {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .subscription-plan:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .subscription-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #8B4513;
+        }
+        
+        .subscription-price {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #A0522D;
+        }
+        
+        .subscription-price span {
+            font-size: 16px;
+            font-weight: normal;
+            color: #666;
+        }
+        
+        .subscription-features {
+            list-style: none;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+        
+        .subscription-features li {
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .subscription-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .subscription-cta {
+            margin-top: 20px;
+        }
+        
+        .premium-plan {
+            border: 2px solid #FFD700;
+            position: relative;
+        }
+        
+        .premium-plan::before {
+            content: "推荐";
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #FFD700;
+            color: #8B4513;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-container">
+        <h1>唐诗三百首策略游戏 - 原型设计</h1>
+        
+        <div class="screens">
+            <!-- 登录/注册界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>登录/注册</span>
+                    <i class="fa fa-user-circle"></i>
+                </div>
+                <div class="screen-body">
+                    <div class="login-container">
+                        <div class="login-logo">
+                            <i class="fa fa-book-open"></i>
+                        </div>
+                        <h2 style="margin-bottom: 20px; text-align: center; color: #8B4513;">唐诗三百首</h2>
+                        <div class="login-form">
+                            <input type="text" class="input" placeholder="用户名/邮箱">
+                            <input type="password" class="input" placeholder="密码">
+                            <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">登录</button>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                                <span style="font-size: 14px; color: #666; cursor: pointer;">忘记密码?</span>
+                                <span style="font-size: 14px; color: #8B4513; cursor: pointer;">注册账号</span>
+                            </div>
+                            <div style="text-align: center; margin-bottom: 15px;">或者</div>
+                            <div style="display: flex; justify-content: center; gap: 15px;">
+                                <button class="btn" style="background: #3b5998; color: white;"><i class="fab fa-facebook-f"></i></button>
+                                <button class="btn" style="background: #1da1f2; color: white;"><i class="fab fa-twitter"></i></button>
+                                <button class="btn" style="background: #db4437; color: white;"><i class="fab fa-google"></i></button>
+                                <button class="btn" style="background: #4CAF50; color: white;"><i class="fab fa-weixin"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 主页/大厅 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>游戏大厅</span>
+                    <i class="fa fa-home"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: #F7E9D9; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa fa-user" style="color: #8B4513;"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: bold; color: #8B4513;">李白</div>
+                                <div style="font-size: 12px; color: #A0522D;">等级 15 | 诗词力量 1250</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="margin-right: 15px; text-align: center;">
+                                <i class="fa fa-gem" style="color: #f1c40f; font-size: 20px;"></i>
+                                <div style="font-size: 12px;">1200</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <i class="fa fa-coins" style="color: #f39c12; font-size: 20px;"></i>
+                                <div style="font-size: 12px;">5600</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #FCF0DB; border-radius: 10px; padding: 15px; margin-bottom: 20px; border-left: 5px solid #8B4513;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <i class="fa fa-bullhorn" style="color: #8B4513; margin-right: 10px;"></i>
+                            <span style="font-weight: bold;">系统公告</span>
+                        </div>
+                        <div style="font-size: 14px; color: #555;">
+                            欢迎来到唐诗三百首战略游戏！本周新增李商隐角色，快来体验吧！目前已收录100首唐诗，正在不断更新中。
+                        </div>
+                    </div>
+                    
+                    <div class="menu-container">
+                        <div class="menu-item">
+                            <div class="menu-icon"><i class="fa fa-chess-knight"></i></div>
+                            <div>开始对战</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i class="fa fa-book"></i></div>
+                            <div>诗词学习</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i class="fa fa-users"></i></div>
+                            <div>社区</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i class="fa fa-store"></i></div>
+                            <div>商城</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i class="fa fa-trophy"></i></div>
+                            <div>排行榜</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-icon"><i class="fa fa-cog"></i></div>
+                            <div>设置</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 游戏模式选择界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>游戏模式</span>
+                    <i class="fa fa-gamepad"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <h3 style="color: #8B4513;">选择游戏模式</h3>
+                        <p style="color: #A0522D; font-size: 14px;">不同游戏模式提供不同的挑战和奖励</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1); display: flex; align-items: center; cursor: pointer; transition: all 0.3s;">
+                            <div style="width: 60px; height: 60px; border-radius: 10px; background: #FCF0DB; margin-right: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa fa-user" style="font-size: 30px; color: #8B4513;"></i>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #8B4513;">单人模式</div>
+                                <div style="font-size: 14px; color: #666;">按照剧情回答问题，探索唐代历史文化</div>
+                            </div>
+                            <i class="fa fa-chevron-right" style="color: #8B4513;"></i>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1); display: flex; align-items: center; cursor: pointer; transition: all 0.3s;">
+                            <div style="width: 60px; height: 60px; border-radius: 10px; background: #FCF0DB; margin-right: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa fa-users" style="font-size: 30px; color: #8B4513;"></i>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #8B4513;">多人对战</div>
+                                <div style="font-size: 14px; color: #666;">与其他玩家实时对战，展示你的诗词功底</div>
+                            </div>
+                            <i class="fa fa-chevron-right" style="color: #8B4513;"></i>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1); display: flex; align-items: center; cursor: pointer; transition: all 0.3s;">
+                            <div style="width: 60px; height: 60px; border-radius: 10px; background: #FCF0DB; margin-right: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa fa-clock" style="font-size: 30px; color: #8B4513;"></i>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #8B4513;">限时挑战</div>
+                                <div style="font-size: 14px; color: #666;">在规定时间内回答尽可能多的问题，挑战高分</div>
+                            </div>
+                            <i class="fa fa-chevron-right" style="color: #8B4513;"></i>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1); display: flex; align-items: center; cursor: pointer; transition: all 0.3s; opacity: 0.7; position: relative;">
+                            <div style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: #8B4513; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px;">
+                                即将上线
+                            </div>
+                            <div style="width: 60px; height: 60px; border-radius: 10px; background: #FCF0DB; margin-right: 15px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fa fa-trophy" style="font-size: 30px; color: #8B4513;"></i>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-weight: bold; font-size: 18px; margin-bottom: 5px; color: #8B4513;">竞技赛季</div>
+                                <div style="font-size: 14px; color: #666;">参与季度竞技赛，争夺丰厚奖励和称号</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 单人模式界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>单人模式</span>
+                    <i class="fa fa-user"></i>
+                </div>
+                <div class="screen-body">
+                    <div class="quiz-container">
+                        <div style="margin-bottom: 20px;">
+                            <div style="background: #F7E9D9; border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+                                <div style="font-weight: bold; margin-bottom: 5px; color: #8B4513;">篇章标题：《盛唐气象》</div>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 5px;">历史背景：贞观之治时期，大唐盛世</div>
+                                <div style="font-size: 14px; color: #666;">关键人物：李白、杜甫、玄宗皇帝</div>
+                            </div>
+                            
+                            <div style="background: #FCF0DB; border-radius: 10px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #8B4513;">
+                                <div style="text-align: center; margin-bottom: 10px;">
+                                    <div style="font-weight: bold; color: #8B4513;">《送杜少府之任蜀州》</div>
+                                    <div style="font-size: 14px; color: #A0522D;">王勃</div>
+                                </div>
+                                <div style="text-align: center; line-height: 1.8; font-size: 16px; color: #8B4513;">
+                                    <p>城阙辅三秦，</p>
+                                    <p>风烟望五津。</p>
+                                    <p>与君离别意，</p>
+                                    <p>同是宦游人。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-question">
+                                面对安史之乱，你作为诗人会：
+                            </div>
+                            
+                            <div class="quiz-options">
+                                <div class="quiz-option">
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 25px; margin-right: 10px; font-weight: bold; color: #8B4513;">A.</div>
+                                        <div>留在长安继续创作</div>
+                                    </div>
+                                </div>
+                                <div class="quiz-option">
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 25px; margin-right: 10px; font-weight: bold; color: #8B4513;">B.</div>
+                                        <div>远走他乡避祸</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: flex-end;">
+                            <button class="btn btn-primary">
+                                <i class="fa fa-paper-plane"></i> 提交答案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 单人模式结果界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>结果展示</span>
+                    <i class="fa fa-check-circle"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="background: #F7E9D9; border-radius: 10px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                        <div style="margin-bottom: 15px;">
+                            <i class="fa fa-star" style="font-size: 40px; color: #f39c12;"></i>
+                        </div>
+                        <div style="font-size: 20px; font-weight: bold; margin-bottom: 10px; color: #8B4513;">你选择了：留在长安继续创作</div>
+                        <div style="font-size: 16px; color: #666; margin-bottom: 15px;">
+                            留守长安将亲历历史变革，可能创作出更多反映时代的诗篇。
+                        </div>
+                        <div style="font-size: 14px; color: #A0522D; margin-bottom: 15px;">
+                            历史上，杜甫曾在安史之乱期间留在长安，目睹了国家的动荡，创作了许多反映时代苦难的诗篇，如《春望》等。
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 10px 30px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: #666;">获得经验</div>
+                                <div style="font-weight: bold; color: #8B4513;">+50</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: #666;">获得金币</div>
+                                <div style="font-weight: bold; color: #8B4513;">+100</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 12px; color: #666;">获得诗词力量</div>
+                                <div style="font-weight: bold; color: #8B4513;">+30</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="poem-svg-container">
+                        <svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 卡片背景 -->
+                            <rect width="800" height="300" fill="#F7E9D9"/>
+                            
+                            <!-- 古风纹样装饰 -->
+                            <path d="M20 20 H780 V280 H20 Z" fill="none" stroke="#8B4513" stroke-width="2"/>
+                            <path d="M40 40 H760 V260 H40 Z" fill="none" stroke="#8B4513" stroke-width="1"/>
+                            
+                            <!-- 标题区域 -->
+                            <text x="400" y="80" font-family="KaiTi" font-size="32" text-anchor="middle" fill="#8B4513">
+                                送杜少府之任蜀州
+                            </text>
+                            
+                            <!-- 作者署名 -->
+                            <text x="400" y="120" font-family="KaiTi" font-size="24" text-anchor="middle" fill="#8B4513">
+                                王勃
+                            </text>
+                            
+                            <!-- 诗词内容 -->
+                            <text x="400" y="170" font-family="KaiTi" font-size="28" text-anchor="middle" fill="#8B4513">
+                                城阙辅三秦，风烟望五津。
+                            </text>
+                            <text x="400" y="220" font-family="KaiTi" font-size="28" text-anchor="middle" fill="#8B4513">
+                                与君离别意，同是宦游人。
+                            </text>
+                        </svg>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+                        <button class="btn btn-primary" style="display: flex; align-items: center;">
+                            <i class="fa fa-volume-up" style="margin-right: 5px;"></i> 朗读诗词
+                        </button>
+                        <button class="btn btn-secondary" style="display: flex; align-items: center;">
+                            <i class="fa fa-arrow-right" style="margin-right: 5px;"></i> 下一题
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 对战界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>诗词对战</span>
+                    <i class="fa fa-chess"></i>
+                </div>
+                <div class="screen-body" style="padding: 0;">
+                    <div class="battle-arena">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <div class="player-info">
+                                <div class="player-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; color: #F7E9D9;">李白</div>
+                                    <div class="health-bar">
+                                        <div class="health-fill" style="width: 70%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; font-size: 24px; font-weight: bold; margin: 0 20px; color: #F7E9D9;">VS</div>
+                            <div class="player-info" style="flex-direction: row-reverse; text-align: right;">
+                                <div class="player-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; color: #F7E9D9;">杜甫</div>
+                                    <div class="health-bar">
+                                        <div class="health-fill" style="width: 40%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="poem-challenge">
+                            <div style="position: absolute; top: 10px; right: 10px; background: rgba(139, 69, 19, 0.2); border-radius: 20px; padding: 5px 10px; font-size: 14px; color: #8B4513;">
+                                <i class="fa fa-clock"></i> 15秒
+                            </div>
+                            
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <h3 style="margin-bottom: 10px; color: #8B4513;">补全下面的诗句：</h3>
+                                <p style="font-size: 18px; margin-bottom: 5px; color: #333;">床前明月光，</p>
+                                <p style="font-size: 18px; color: #8B4513;">_________。</p>
+                            </div>
+                            
+                            <div class="answers">
+                                <div class="answer-option">疑是地上霜</div>
+                                <div class="answer-option">低头思故乡</div>
+                                <div class="answer-option">举头望明月</div>
+                                <div class="answer-option">明月照大江</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%;">
+                                    <i class="fa fa-bolt"></i>
+                                </button>
+                                <button class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%;">
+                                    <i class="fa fa-shield-alt"></i>
+                                </button>
+                                <button class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%;">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+                            </div>
+                            <button class="btn btn-danger">
+                                <i class="fa fa-flag"></i> 投降
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 诗词学习界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>诗词学习</span>
+                    <i class="fa fa-book"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="margin-bottom: 20px; position: relative;">
+                        <input type="text" class="input" placeholder="搜索诗词..." style="padding-left: 35px;">
+                        <i class="fa fa-search" style="position: absolute; top: 12px; left: 12px; color: #999;"></i>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px;">
+                        <div style="padding: 5px 15px; background: #8B4513; color: white; border-radius: 20px; white-space: nowrap;">全部</div>
+                        <div style="padding: 5px 15px; background: #F7E9D9; color: #8B4513; border-radius: 20px; white-space: nowrap;">五言绝句</div>
+                        <div style="padding: 5px 15px; background: #F7E9D9; color: #8B4513; border-radius: 20px; white-space: nowrap;">七言绝句</div>
+                        <div style="padding: 5px 15px; background: #F7E9D9; color: #8B4513; border-radius: 20px; white-space: nowrap;">五言律诗</div>
+                        <div style="padding: 5px 15px; background: #F7E9D9; color: #8B4513; border-radius: 20px; white-space: nowrap;">七言律诗</div>
+                        <div style="padding: 5px 15px; background: #F7E9D9; color: #8B4513; border-radius: 20px; white-space: nowrap;">边塞诗</div>
+                        <div style="padding: 5px 15px; background: #F7E9D9; color: #8B4513; border-radius: 20px; white-space: nowrap;">山水诗</div>
+                    </div>
+                    
+                    <div class="poem-card">
+                        <div class="poem-title">
+                            <span>《静夜思》</span>
+                            <span class="badge badge-primary">已掌握</span>
+                        </div>
+                        <div class="poem-author">唐代 · 李白</div>
+                        <div class="poem-preview">床前明月光，疑是地上霜。举头望明月，低头思故乡。</div>
+                    </div>
+                    
+                    <div class="poem-card">
+                        <div class="poem-title">
+                            <span>《春晓》</span>
+                            <span class="badge badge-secondary">学习中</span>
+                        </div>
+                        <div class="poem-author">唐代 · 孟浩然</div>
+                        <div class="poem-preview">春眠不觉晓，处处闻啼鸟。夜来风雨声，花落知多少。</div>
+                    </div>
+                    
+                    <div class="poem-card">
+                        <div class="poem-title">
+                            <span>《登鹳雀楼》</span>
+                            <span class="badge badge-secondary">学习中</span>
+                        </div>
+                        <div class="poem-author">唐代 · 王之涣</div>
+                        <div class="poem-preview">白日依山尽，黄河入海流。欲穷千里目，更上一层楼。</div>
+                    </div>
+                    
+                    <div class="poem-card">
+                        <div class="poem-title">
+                            <span>《望庐山瀑布》</span>
+                        </div>
+                        <div class="poem-author">唐代 · 李白</div>
+                        <div class="poem-preview">日照香炉生紫烟，遥看瀑布挂前川。飞流直下三千尺，疑是银河落九天。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 诗词详情界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>诗词详情</span>
+                    <i class="fa fa-book-open"></i>
+                </div>
+                <div class="screen-body">
+                    <div class="poem-detail">
+                        <div class="floating-lanterns">
+                            <div class="lantern">
+                                <div class="lantern-tassel"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="poem-detail-header">
+                            <div class="poem-detail-title">静夜思</div>
+                            <div class="poem-detail-author">唐代 · 李白</div>
+                        </div>
+                        
+                        <div class="poem-detail-content">
+                            <p>床前明月光，</p>
+                            <p>疑是地上霜。</p>
+                            <p>举头望明月，</p>
+                            <p>低头思故乡。</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-weight: bold; margin-bottom: 5px; color: #8B4513;">译文：</div>
+                            <div style="font-size: 14px; color: #666; line-height: 1.8;">
+                                床前洒落着如水的月光，好像地上铺了一层霜。抬头望着空中的明月，低下头来不禁思念起远方的家乡。
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-weight: bold; margin-bottom: 5px; color: #8B4513;">赏析：</div>
+                            <div style="font-size: 14px; color: #666; line-height: 1.8;">
+                                这首诗通过描绘月夜的静谧景象，抒发了思乡之情。诗人运用比喻手法，将月光比作霜，表现了月光的清冷。诗的前两句是写景，后两句抒情，自然流畅，意境深远。
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-weight: bold; margin-bottom: 5px; color: #8B4513;">背景：</div>
+                            <div style="font-size: 14px; color: #666; line-height: 1.8;">
+                                李白作此诗时正漫游各地，远离家乡。在一个月明之夜，诗人被床前如水的月光所惊醒，思绪万千，不禁思念起远方的家乡。
+                            </div>
+                        </div>
+                        
+                        <div class="poem-detail-actions">
+                            <button class="btn btn-primary" style="display: flex; align-items: center;">
+                                <i class="fa fa-volume-up" style="margin-right: 5px;"></i> 朗读
+                            </button>
+                            <button class="btn btn-secondary" style="display: flex; align-items: center;">
+                                <i class="fa fa-star" style="margin-right: 5px;"></i> 收藏
+                            </button>
+                            <button class="btn btn-secondary" style="display: flex; align-items: center;">
+                                <i class="fa fa-share-alt" style="margin-right: 5px;"></i> 分享
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #8B4513;">学习挑战</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; cursor: pointer;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #F7E9D9; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-graduation-cap" style="color: #8B4513;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; margin-bottom: 3px; color: #8B4513;">背诵挑战</div>
+                                    <div style="font-size: 12px; color: #666;">完成背诵获得额外奖励</div>
+                                </div>
+                            </div>
+                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; cursor: pointer;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #F7E9D9; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-puzzle-piece" style="color: #8B4513;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold; margin-bottom: 3px; color: #8B4513;">填空挑战</div>
+                                    <div style="font-size: 12px; color: #666;">测试你对诗词的掌握程度</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 角色选择界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>角色选择</span>
+                    <i class="fa fa-user-alt"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <h3 style="color: #8B4513;">选择你的诗人角色</h3>
+                        <p style="color: #A0522D; font-size: 14px;">每位诗人拥有独特技能和背景故事</p>
+                    </div>
+                    
+                    <div class="character-selection">
+                        <div class="character-card">
+                            <div class="character-avatar">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="character-name">李白</div>
+                            <div class="character-desc">诗仙，擅长爆发伤害，技能冷却时间短</div>
+                            <div class="character-stats">
+                                <div class="stat">
+                                    <div class="stat-value">9</div>
+                                    <div class="stat-label">攻击</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">6</div>
+                                    <div class="stat-label">防御</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-label">速度</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">选择</button>
+                        </div>
+                        
+                        <div class="character-card">
+                            <div class="character-avatar">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="character-name">杜甫</div>
+                            <div class="character-desc">诗圣，擅长持续作战，生命值恢复能力强</div>
+                            <div class="character-stats">
+                                <div class="stat">
+                                    <div class="stat-value">7</div>
+                                    <div class="stat-label">攻击</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">9</div>
+                                    <div class="stat-label">防御</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">6</div>
+                                    <div class="stat-label">速度</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">选择</button>
+                        </div>
+                        
+                        <div class="character-card">
+                            <div class="character-avatar">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="character-name">白居易</div>
+                            <div class="character-desc">诗魂，平衡型角色，擅长辅助队友</div>
+                            <div class="character-stats">
+                                <div class="stat">
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-label">攻击</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-label">防御</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">7</div>
+                                    <div class="stat-label">速度</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">选择</button>
+                        </div>
+                        
+                        <div class="character-card" style="opacity: 0.5; position: relative;">
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); border-radius: 8px;">
+                                <div style="background: #8B4513; color: white; padding: 5px 10px; border-radius: 5px;">
+                                    <i class="fa fa-lock"></i> 未解锁
+                                </div>
+                            </div>
+                            <div class="character-avatar">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <div class="character-name">李商隐</div>
+                            <div class="character-desc">少数派，擅长控制，可干扰对手思路</div>
+                            <div class="character-stats">
+                                <div class="stat">
+                                    <div class="stat-value">?</div>
+                                    <div class="stat-label">攻击</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">?</div>
+                                    <div class="stat-label">防御</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">?</div>
+                                    <div class="stat-label">速度</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary">解锁</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 角色进阶界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>角色进阶</span>
+                    <i class="fa fa-level-up-alt"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: #F7E9D9; margin-right: 20px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa fa-user" style="font-size: 40px; color: #8B4513;"></i>
+                        </div>
+                        <div style="flex-grow: 1;">
+                            <div style="font-weight: bold; font-size: 20px; margin-bottom: 5px; color: #8B4513;">李白</div>
+                            <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                                <div style="font-size: 14px; color: #666; margin-right: 10px;">等级 15</div>
+                                <div style="flex-grow: 1; height: 8px; background: #ddd; border-radius: 4px; overflow: hidden;">
+                                    <div style="height: 100%; width: 75%; background: #8B4513;"></div>
+                                </div>
+                                <div style="font-size: 14px; color: #666; margin-left: 10px;">75%</div>
+                            </div>
+                            <div style="font-size: 14px; color: #666;">距离下一级还需 250 经验</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <div style="font-weight: bold; margin-bottom: 15px; color: #8B4513;">技能强化</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: #FCF0DB; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa fa-bolt" style="color: #8B4513;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold; color: #8B4513;">诗仙之力</div>
+                                        <div style="font-size: 12px; color: #666;">Lv.3</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 10px;">攻击时有30%几率造成额外伤害</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="color: #e74c3c; font-weight: bold;">500 <i class="fa fa-coins" style="font-size: 12px;"></i></div>
+                                    <button class="btn btn-primary" style="font-size: 12px;">升级到 Lv.4</button>
+                                </div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: #FCF0DB; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa fa-shield-alt" style="color: #8B4513;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold; color: #8B4513;">醉酒防御</div>
+                                        <div style="font-size: 12px; color: #666;">Lv.2</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 10px;">受到攻击时有20%几率闪避</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="color: #e74c3c; font-weight: bold;">300 <i class="fa fa-coins" style="font-size: 12px;"></i></div>
+                                    <button class="btn btn-primary" style="font-size: 12px;">升级到 Lv.3</button>
+                                </div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: #FCF0DB; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa fa-tachometer-alt" style="color: #8B4513;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold; color: #8B4513;">快速思考</div>
+                                        <div style="font-size: 12px; color: #666;">Lv.2</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 10px;">答题时间延长2秒</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="color: #e74c3c; font-weight: bold;">300 <i class="fa fa-coins" style="font-size: 12px;"></i></div>
+                                    <button class="btn btn-primary" style="font-size: 12px;">升级到 Lv.3</button>
+                                </div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); opacity: 0.7;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: #FCF0DB; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa fa-question" style="color: #8B4513;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold; color: #8B4513;">未解锁技能</div>
+                                        <div style="font-size: 12px; color: #666;">Lv.0</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 14px; color: #666; margin-bottom: 10px;">需要角色达到20级解锁</div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="color: #e74c3c; font-weight: bold;">-- <i class="fa fa-coins" style="font-size: 12px;"></i></div>
+                                    <button class="btn btn-secondary" style="font-size: 12px;" disabled>未解锁</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="font-weight: bold; margin-bottom: 15px; color: #8B4513;">特殊技能</div>
+                        <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 15px;">
+                                <div style="width: 60px; height: 60px; border-radius: 50%; background: #FCF0DB; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-wine-glass-alt" style="font-size: 30px; color: #8B4513;"></i>
+                                </div>
+                                <div style="font-weight: bold; color: #8B4513;">将进酒</div>
+                            </div>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 15px; text-align: center;">
+                                激活后，连续答对3题，每题伤害提高50%
+                            </div>
+                            <div style="display: flex; justify-content: center;">
+                                <button class="btn btn-primary">装备技能</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 排行榜界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>排行榜</span>
+                    <i class="fa fa-trophy"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-primary">全球榜</button>
+                        <button class="btn" style="background: #F7E9D9; color: #8B4513;">好友榜</button>
+                        <button class="btn" style="background: #F7E9D9; color: #8B4513;">周榜</button>
+                        <button class="btn" style="background: #F7E9D9; color: #8B4513;">月榜</button>
+                    </div>
+                    
+                    <div class="rank-list">
+                        <div class="rank-item">
+                            <div class="rank-position top">1</div>
+                            <div class="rank-user">
+                                <div class="rank-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="rank-name">诗林高手</div>
+                                    <div style="font-size: 12px; color: #666;">李白 Lv.30</div>
+                                </div>
+                            </div>
+                            <div class="rank-score">9876</div>
+                        </div>
+                        
+                        <div class="rank-item">
+                            <div class="rank-position top">2</div>
+                            <div class="rank-user">
+                                <div class="rank-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="rank-name">诗书传家</div>
+                                    <div style="font-size: 12px; color: #666;">杜甫 Lv.28</div>
+                                </div>
+                            </div>
+                            <div class="rank-score">8765</div>
+                        </div>
+                        
+                        <div class="rank-item">
+                            <div class="rank-position top">3</div>
+                            <div class="rank-user">
+                                <div class="rank-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="rank-name">唐风宋韵</div>
+                                    <div style="font-size: 12px; color: #666;">白居易 Lv.25</div>
+                                </div>
+                            </div>
+                            <div class="rank-score">7654</div>
+                        </div>
+                        
+                        <div class="rank-item">
+                            <div class="rank-position">4</div>
+                            <div class="rank-user">
+                                <div class="rank-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="rank-name">诗词达人</div>
+                                    <div style="font-size: 12px; color: #666;">李白 Lv.23</div>
+                                </div>
+                            </div>
+                            <div class="rank-score">6543</div>
+                        </div>
+                        
+                        <div class="rank-item">
+                            <div class="rank-position">5</div>
+                            <div class="rank-user">
+                                <div class="rank-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div>
+                                    <div class="rank-name">吟风弄月</div>
+                                    <div style="font-size: 12px; color: #666;">杜甫 Lv.20</div>
+                                </div>
+                            </div>
+                            <div class="rank-score">5432</div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: center; color: #8B4513; font-weight: bold;">
+                            <div style="margin-bottom: 10px;">--- 我的排名 ---</div>
+                            <div class="rank-item">
+                                <div class="rank-position" style="background: #8B4513;">128</div>
+                                <div class="rank-user">
+                                    <div class="rank-avatar">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <div class="rank-name">我</div>
+                                        <div style="font-size: 12px; color: #666;">李白 Lv.15</div>
+                                    </div>
+                                </div>
+                                <div class="rank-score">1250</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 成就界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>成就</span>
+                    <i class="fa fa-medal"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px; color: #8B4513;">35/100</div>
+                        <div style="color: #666; font-size: 14px;">已完成成就</div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <button class="btn btn-primary">全部</button>
+                        <button class="btn" style="background: #F7E9D9; color: #8B4513;">战斗</button>
+                        <button class="btn" style="background: #F7E9D9; color: #8B4513;">收集</button>
+                        <button class="btn" style="background: #F7E9D9; color: #8B4513;">学习</button>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-title">初出茅庐</div>
+                            <div class="achievement-desc">赢得第一场对战</div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px; color: #2ecc71;">
+                            <i class="fa fa-check-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fa fa-book"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-title">诗词小能手</div>
+                            <div class="achievement-desc">掌握10首唐诗</div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px; color: #f39c12;">
+                            7/10
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="fa fa-fire"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-title">连胜达人</div>
+                            <div class="achievement-desc">连续获得5场胜利</div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px; color: #f39c12;">
+                            3/5
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon" style="color: #bbb;">
+                            <i class="fa fa-crown"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-title" style="color: #888;">诗词王者</div>
+                            <div class="achievement-desc">达到30级</div>
+                            <div class="progress">
+                                <div class="progress-fill" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-left: 10px; color: #f39c12;">
+                            15/30
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 商城界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>商城</span>
+                    <i class="fa fa-store"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; gap: 15px;">
+                            <button class="btn btn-primary">道具</button>
+                            <button class="btn" style="background: #F7E9D9; color: #8B4513;">角色</button>
+                            <button class="btn" style="background: #F7E9D9; color: #8B4513;">皮肤</button>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <div style="margin-right: 15px;">
+                                <i class="fa fa-gem" style="color: #f1c40f; margin-right: 5px;"></i>
+                                <span>1200</span>
+                            </div>
+                            <div>
+                                <i class="fa fa-coins" style="color: #f39c12; margin-right: 5px;"></i>
+                                <span>5600</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-items">
+                        <div class="shop-item">
+                            <div class="shop-item-img">
+                                <i class="fa fa-bolt"></i>
+                            </div>
+                            <div class="shop-item-name">诗词战记</div>
+                            <div class="shop-item-desc">使下一轮答题时间延长5秒</div>
+                            <div class="shop-item-price">100 <i class="fa fa-coins"></i></div>
+                            <button class="btn btn-primary">购买</button>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="shop-item-img">
+                                <i class="fa fa-heart"></i>
+                            </div>
+                            <div class="shop-item-name">诗词甘露</div>
+                            <div class="shop-item-desc">恢复30%生命值</div>
+                            <div class="shop-item-price">150 <i class="fa fa-coins"></i></div>
+                            <button class="btn btn-primary">购买</button>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="shop-item-img">
+                                <i class="fa fa-shield-alt"></i>
+                            </div>
+                            <div class="shop-item-name">诗词护盾</div>
+                            <div class="shop-item-desc">一次错误答题不受到伤害</div>
+                            <div class="shop-item-price">200 <i class="fa fa-coins"></i></div>
+                            <button class="btn btn-primary">购买</button>
+                        </div>
+                        
+                        <div class="shop-item">
+                            <div class="shop-item-img">
+                                <i class="fa fa-gem"></i>
+                            </div>
+                            <div class="shop-item-name">诗词宝典</div>
+                            <div class="shop-item-desc">解锁一位随机角色</div>
+                            <div class="shop-item-price">500 <i class="fa fa-gem"></i></div>
+                            <button class="btn btn-primary">购买</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 会员订阅界面 -->
+            <div class="screen">
+                <div class="screen-header">
+                    <span>会员订阅</span>
+                    <i class="fa fa-crown"></i>
+                </div>
+                <div class="screen-body">
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <h3 style="color: #8B4513;">升级为会员，享受更多特权</h3>
+                        <p style="color: #A0522D; font-size: 14px;">解锁所有内容，提升游戏体验</p>
+                    </div>
+                    
+                    <div class="subscription-plan">
+                        <div class="subscription-title">月度
+                            <div class="subscription-title">月度会员</div>
+                            <div class="subscription-price">¥18 <span>/月</span></div>
+                            <ul class="subscription-features">
+                                <li>无广告体验</li>
+                                <li>每日额外10次对战机会</li>
+                                <li>解锁1位特殊角色</li>
+                                <li>每月赠送100金币</li>
+                            </ul>
+                            <div class="subscription-cta">
+                                <button class="btn btn-primary">立即订阅</button>
+                            </div>
+                        </div>
+                        
+                        <div class="subscription-plan premium-plan">
+                            <div class="subscription-title">年度会员</div>
+                            <div class="subscription-price">¥158 <span>/年</span></div>
+                            <ul class="subscription-features">
+                                <li>无广告体验</li>
+                                <li>无限对战机会</li>
+                                <li>解锁所有特殊角色</li>
+                                <li>每月赠送300金币</li>
+                                <li>专属角色皮肤</li>
+                                <li>唐诗课程指导</li>
+                            </ul>
+                            <div class="subscription-cta">
+                                <button class="btn btn-primary">立即订阅</button>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #888;">
+                            订阅即代表您同意我们的<span style="color: #8B4513; text-decoration: underline; cursor: pointer;">用户协议</span>和<span style="color: #8B4513; text-decoration: underline; cursor: pointer;">隐私政策</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 社区界面 -->
+                <div class="screen">
+                    <div class="screen-header">
+                        <span>社区</span>
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <div class="screen-body">
+                        <div style="margin-bottom: 20px;">
+                            <div style="background: white; border-radius: 8px; padding: 15px; display: flex; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: #F7E9D9; margin-right: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa fa-user" style="color: #8B4513;"></i>
+                                </div>
+                                <input type="text" class="input" style="margin-bottom: 0;" placeholder="分享你的诗词心得...">
+                                <button class="btn btn-primary" style="margin-left: 10px; white-space: nowrap;">发布</button>
+                            </div>
+                        </div>
+                        
+                        <div class="community-post">
+                            <div class="post-header">
+                                <div class="post-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div class="post-info">
+                                    <div class="post-author">诗林高手</div>
+                                    <div class="post-time">2小时前</div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                刚刚用李白打败了一个杜甫玩家，这首《静夜思》帮了大忙！分享一下我的心得：背诵诗词时要理解意境，这样在对战中才能快速反应。
+                            </div>
+                            <div class="post-actions">
+                                <div class="post-action">
+                                    <i class="fa fa-thumbs-up"></i> 点赞 (45)
+                                </div>
+                                <div class="post-action">
+                                    <i class="fa fa-comment"></i> 评论 (12)
+                                </div>
+                                <div class="post-action">
+                                    <i class="fa fa-share"></i> 分享
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="community-post">
+                            <div class="post-header">
+                                <div class="post-avatar">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div class="post-info">
+                                    <div class="post-author">诗书传家</div>
+                                    <div class="post-time">5小时前</div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                推荐大家尝试白居易角色，他的辅助技能在团队战中非常强大！我最喜欢的是《长恨歌》，虽然很长，但是学会后战斗力大增！
+                            </div>
+                            <div class="post-actions">
+                                <div class="post-action">
+                                    <i class="fa fa-thumbs-up"></i> 点赞 (32)
+                                </div>
+                                <div class="post-action">
+                                    <i class="fa fa-comment"></i> 评论 (8)
+                                </div>
+                                <div class="post-action">
+                                    <i class="fa fa-share"></i> 分享
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 诗集收藏界面 -->
+                <div class="screen">
+                    <div class="screen-header">
+                        <span>诗集收藏</span>
+                        <i class="fa fa-bookmark"></i>
+                    </div>
+                    <div class="screen-body">
+                        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="color: #8B4513;">我的收藏</h3>
+                            <div style="color: #8B4513; font-size: 14px;">
+                                <span style="font-weight: bold;">26</span>/300 首
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <input type="text" class="input" placeholder="搜索我的收藏..." style="padding-left: 35px;">
+                            <i class="fa fa-search" style="position: absolute; top: 12px; left: 12px; color: #999;"></i>
+                        </div>
+                        
+                        <div class="collection-grid">
+                            <div class="collection-item">
+                                <div class="collection-icon">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <div class="collection-title">山水诗</div>
+                                <div class="collection-count">5首</div>
+                            </div>
+                            
+                            <div class="collection-item">
+                                <div class="collection-icon">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <div class="collection-title">思乡诗</div>
+                                <div class="collection-count">8首</div>
+                            </div>
+                            
+                            <div class="collection-item">
+                                <div class="collection-icon">
+                                    <i class="fa fa-book"></i>
+                                </div>
+                                <div class="collection-title">边塞诗</div>
+                                <div class="collection-count">7首</div>
+                            </div>
+                            
+                            <div class="collection-item">
+                                <div class="collection-icon">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                                <div class="collection-title">新建分类</div>
+                                <div class="collection-count"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 30px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="color: #8B4513;">最近收藏</h3>
+                                <span style="color: #8B4513; cursor: pointer; font-size: 14px;">查看全部</span>
+                            </div>
+                            
+                            <div class="poem-card">
+                                <div class="poem-title">
+                                    <span>《静夜思》</span>
+                                    <i class="fa fa-heart" style="color: #e74c3c;"></i>
+                                </div>
+                                <div class="poem-author">唐代 · 李白</div>
+                                <div class="poem-preview">床前明月光，疑是地上霜。举头望明月，低头思故乡。</div>
+                            </div>
+                            
+                            <div class="poem-card">
+                                <div class="poem-title">
+                                    <span>《望岳》</span>
+                                    <i class="fa fa-heart" style="color: #e74c3c;"></i>
+                                </div>
+                                <div class="poem-author">唐代 · 杜甫</div>
+                                <div class="poem-preview">岱宗夫如何？齐鲁青未了。造化钟神秀，阴阳割昏晓。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 学习进度界面 -->
+                <div class="screen">
+                    <div class="screen-header">
+                        <span>学习进度</span>
+                        <i class="fa fa-chart-line"></i>
+                    </div>
+                    <div class="screen-body">
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1); margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div>
+                                    <div style="font-weight: bold; font-size: 18px; color: #8B4513;">总体进度</div>
+                                    <div style="font-size: 14px; color: #666;">你正在成为诗词大师的路上</div>
+                                </div>
+                                <div style="font-size: 24px; font-weight: bold; color: #8B4513;">38%</div>
+                            </div>
+                            
+                            <div style="height: 20px; background: #F7E9D9; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
+                                <div style="height: 100%; width: 38%; background: #8B4513; border-radius: 10px;"></div>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #666;">
+                                <div>0首</div>
+                                <div>已学习：114首</div>
+                                <div>300首</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div style="font-weight: bold; margin-bottom: 10px; color: #8B4513;">今日学习</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #8B4513;">5首</div>
+                                <div style="font-size: 12px; color: #666;">超过了86%的用户</div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                                <div style="font-weight: bold; margin-bottom: 10px; color: #8B4513;">连续学习</div>
+                                <div style="font-size: 24px; font-weight: bold; color: #8B4513;">12天</div>
+                                <div style="font-size: 12px; color: #666;">再坚持3天获得额外奖励</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);">
+                            <div style="font-weight: bold; margin-bottom: 15px; color: #8B4513;">分类进度</div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <div style="font-size: 14px;">五言绝句</div>
+                                    <div style="font-size: 14px; color: #666;">27/58首</div>
+                                </div>
+                                <div style="height: 10px; background: #F7E9D9; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 100%; width: 46%; background: #8B4513;"></div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <div style="font-size: 14px;">七言绝句</div>
+                                    <div style="font-size: 14px; color: #666;">35/63首</div>
+                                </div>
+                                <div style="height: 10px; background: #F7E9D9; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 100%; width: 55%; background: #8B4513;"></div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <div style="font-size: 14px;">五言律诗</div>
+                                    <div style="font-size: 14px; color: #666;">18/52首</div>
+                                </div>
+                                <div style="height: 10px; background: #F7E9D9; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 100%; width: 35%; background: #8B4513;"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <div style="font-size: 14px;">七言律诗</div>
+                                    <div style="font-size: 14px; color: #666;">23/75首</div>
+                                </div>
+                                <div style="height: 10px; background: #F7E9D9; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 100%; width: 30%; background: #8B4513;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 设置界面 -->
+                <div class="screen">
+                    <div class="screen-header">
+                        <span>设置</span>
+                        <i class="fa fa-cog"></i>
+                    </div>
+                    <div class="screen-body">
+                        <div class="settings-item">
+                            <div class="settings-label">语言</div>
+                            <div class="settings-desc">选择游戏显示语言</div>
+                            <div class="settings-control language-select">
+                                <div class="language-option active">中文</div>
+                                <div class="language-option">English</div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-label">音效</div>
+                            <div class="settings-desc">游戏音效开关</div>
+                            <div class="settings-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-label">背景音乐</div>
+                            <div class="settings-desc">游戏背景音乐开关</div>
+                            <div class="settings-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-label">通知</div>
+                            <div class="settings-desc">游戏通知开关</div>
+                            <div class="settings-control">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-label">账号绑定</div>
+                            <div class="settings-desc">绑定社交账号以保存游戏进度</div>
+                            <div class="settings-control" style="display: flex; gap: 10px;">
+                                <button class="btn" style="background: #3b5998; color: white;"><i class="fab fa-facebook-f"></i> 绑定</button>
+                                <button class="btn" style="background: #1da1f2; color: white;"><i class="fab fa-twitter"></i> 绑定</button>
+                                <button class="btn" style="background: #4CAF50; color: white;"><i class="fab fa-weixin"></i> 已绑定</button>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-label">缓存管理</div>
+                            <div class="settings-desc">清除本地缓存数据</div>
+                            <div class="settings-control">
+                                <button class="btn" style="background: #F7E9D9; color: #8B4513;">清除缓存</button>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-label">关于我们</div>
+                            <div class="settings-desc">游戏版本、开发团队等信息</div>
+                            <div class="settings-control">
+                                <div style="font-size: 14px; color: #666;">
+                                    版本：v1.0.0<br>
+                                    开发：诗词游戏工作室<br>
+                                    联系邮箱：contact@tangshigame.online
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+                            <button class="btn btn-danger">退出登录</button>
+                            <button class="btn" style="background: #F7E9D9; color: #8B4513;">用户协议</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
